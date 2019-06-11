@@ -1,6 +1,10 @@
 #include "card.h"
 
-Card::Card(int value, suit s) {
+/*
+ * Constructor for Card obj
+ */
+
+Card::Card(int value, Suit s) {
     this->value = value;
     this->s = s;
 }

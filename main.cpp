@@ -1,8 +1,11 @@
-#include "card.h"
+#include "deck.h"
 #include <iostream>
 
 int main() {
-    Card* c = new Card(5, Card::HEARTS);
-    std::cout<<c->value<<" "<<c->s<<std::endl;
-    delete(c);
+    //Card* c = new Card(5, Card::Suit::HEARTS);
+    //std::cout<<(*c)<<std::endl;
+
+    Deck* d = new Deck();
+    d->shuffle();
+    std::cout<<(*d)<<std::endl;
 }
