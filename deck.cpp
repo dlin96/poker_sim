@@ -18,6 +18,14 @@ size_t Deck::remainingCards() {
 }
 
 void Deck::shuffle() {
-    auto rng = std::default_random_engine{};
-    std::shuffle(deck.begin(), deck.end(), rng);
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(deck.begin(), deck.end(), g);
+}
+
+Card* Deck::deal() {
+    Card* c = deck.front();
+    deck.erase(deck.begin());
+
+    return c;
 }
