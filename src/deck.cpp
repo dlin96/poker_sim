@@ -1,10 +1,9 @@
 #include "deck.h"
 
-#define DECK_SIZE 52
 #define VALS 14
 
 Deck::Deck() {
-    for(int i=0; i<suits.size(); i++) {
+    for(size_t i=0; i<suits.size(); i++) {
         Card::Suit s = suits[i];
         for (int j=2; j <= VALS; j++) {
             Card* c = new Card(j, s);
@@ -28,4 +27,16 @@ Card* Deck::deal() {
     deck.erase(deck.begin());
 
     return c;
+}
+
+void Deck::burn() {
+    Card* c = deal();
+    delete c;
+}
+
+Deck::~Deck() {
+    for(size_t i=0; i<deck.size(); i++) {
+        delete deck[i];
+    }
+
 }

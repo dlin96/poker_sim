@@ -12,3 +12,11 @@ void Player::addCard(Card* c) {
     hand[cardCount] = c;
     cardCount++;
 }
+
+Player::~Player() {
+    if (hand[0] != nullptr)
+        delete hand[0];
+
+    if (hand[1] != nullptr)
+        delete hand[1];
+}

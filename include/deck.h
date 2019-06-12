@@ -13,10 +13,12 @@ class Deck {
 
     public:
         Deck();
+        ~Deck();
         size_t remainingCards();
         void shuffle();
         void printSuits();
         Card* deal();
+        void burn();
 
         friend std::ostream& operator<<(std::ostream& os, Deck& d) {
             for (Card* c : d.deck) {

@@ -11,6 +11,7 @@ class Player {
 
     public:
         Player();        
+        ~Player();
         void addCard(Card*);
         void showHand();
         friend std::ostream& operator<<(std::ostream& os, Player& p) {
