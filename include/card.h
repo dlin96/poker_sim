@@ -10,6 +10,9 @@ class Card {
         enum class Suit {CLUBS, DIAMONDS, HEARTS, SPADES};
         Suit s;
         Card (int, Suit);
+        inline bool operator <(const Card& c) {
+            return value < c.value;
+        }
         friend std::ostream& operator<<(std::ostream& os, const Card& c) {
             std::string suit;
             switch (c.s) {
@@ -27,7 +30,26 @@ class Card {
                     break;
             }
 
-            os<<"val: "<<c.value<<" "<<"suit: "<<suit;
+            std::string rank;
+            switch(c.value) {
+                case 11:
+                    rank = "Jack";
+                    break;
+                case 12:
+                    rank = "Queen";
+                    break;
+                case 13: 
+                    rank = "King";
+                    break;
+                case 14:
+                    rank = "Ace";
+                    break;
+                default:
+                    rank = std::to_string(c.value);
+                    break;
+            }
+
+            os<<"val: "<<rank<<" "<<"suit: "<<suit;
             return os;
         }
 };

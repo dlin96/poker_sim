@@ -1,4 +1,5 @@
 #include "card.h"
+#include "pokerhands.h"
 #include <ostream>
 
 #ifndef PLAYER_H_
@@ -13,7 +14,7 @@ class Player {
         Player();        
         ~Player();
         void addCard(Card*);
-        void showHand();
+        // void showHand(Card**);
         friend std::ostream& operator<<(std::ostream& os, Player& p) {
             for (Card* c : p.hand) {
                 if (c != nullptr)

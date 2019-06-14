@@ -1,2 +1,4 @@
 *.swp
 texas_holdem
+*.o
+a.out
