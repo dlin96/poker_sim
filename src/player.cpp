@@ -82,16 +82,15 @@ poker_hands Player::bestHand (Card** cards) {
 
 void sort(Card** cards) {
     int n = 7;
-    while (n > 0) {
+    while (n >= 0) {
         for(int i=0; i<n-1; i++) {
             if (cards[i] > cards[i+1]) {
                 Card* tmp = cards[i];
                 cards[i] = cards[i+1];
                 cards[i+1] = tmp;
-                n = i;
+                n = i+1;
             }
         }
-
     }
 }
 
