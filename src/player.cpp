@@ -12,11 +12,11 @@ void Player::addCard(Card* c) {
     hand[cardCount] = c;
     cardCount++;
 }
-
+/*
 void Player::showHand(Card** board) {
     
 
-}
+} */
 
 /*
  * method_name: bestHand()
@@ -29,6 +29,7 @@ void Player::showHand(Card** board) {
  * 
  * return: poker_hands 
  */
+/*
 poker_hands Player::bestHand (Card** cards) {
     poker_hands bestHand = poker_hands::HIGH;   // the best hand is high so far
     std::unordered_map<int, int> rankCounts;    // holding counts of each rank
@@ -79,11 +80,12 @@ poker_hands Player::bestHand (Card** cards) {
     }
 
 }
-
-void sort(Card** cards) {
+*/
+void Player::sort(Card** cards) {
+    std::cout<<"sort"<<std::endl;
     int n = 7;
     while (n >= 0) {
-        for(int i=0; i<n-1; i++) {
+        for(int i=0; i<n; i++) {
             if (cards[i] > cards[i+1]) {
                 Card* tmp = cards[i];
                 cards[i] = cards[i+1];

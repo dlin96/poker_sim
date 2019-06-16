@@ -14,6 +14,7 @@ class Player {
         Player();        
         ~Player();
         void addCard(Card*);
+        static void sort(Card**);
         // void showHand(Card**);
         friend std::ostream& operator<<(std::ostream& os, Player& p) {
             for (Card* c : p.hand) {
