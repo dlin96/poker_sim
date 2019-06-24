@@ -1,5 +1,6 @@
 #include "player.h"
 #include <iostream>
+#include <unordered_map>
 
 Player::Player() : hand {nullptr, nullptr}, cardCount(0) {}
 
@@ -13,10 +14,10 @@ void Player::addCard(Card* c) {
     cardCount++;
 }
 
-void Player::showHand(Card** board) {
+/*void Player::showHand(Card** board) {
     
 
-}
+}*/
 
 /*
  * method_name: bestHand()
@@ -34,12 +35,12 @@ poker_hands Player::bestHand (Card** cards) {
     std::unordered_map<int, int> rankCounts;    // holding counts of each rank
 
     // count frequency of each rank, checking for pairs, three of a kind etc. 
-    for(Card* c : cards) {
-        auto iter = rankCounts.find(c->value);
+    for(int i=0; i<7; i++) {
+        auto iter = rankCounts.find(cards[i]->value);
         if (iter != rankCounts.end()) {
             iter->second++;
         } else {
-            rankCounts.insert({c->value, 1});
+            rankCounts.insert({cards[i]->value, 1});
         }
     }
 
@@ -58,9 +59,11 @@ poker_hands Player::bestHand (Card** cards) {
                     case poker_hands::HIGH:
                         bestHand = poker_hands::PAIR;
                         break;
+                    default:
+                        break;
                 }
 
-                rank = max(rank, iter->first);
+                rank = std::max(rank, iter->first);
                 break;
             case 3:
                 if (bestHand == poker_hands::PAIR) {
@@ -69,7 +72,7 @@ poker_hands Player::bestHand (Card** cards) {
                     bestHand = poker_hands::THREEOFAKIND;
                 }
 
-                rank = max(iter->first, rank);
+                rank = std::max(iter->first, rank);
                 break;
             case 4:
                 bestHand = poker_hands::FOUROFAKIND;
@@ -77,6 +80,8 @@ poker_hands Player::bestHand (Card** cards) {
                 break;
         }
     }
+
+    return bestHand;
 
 }
 
@@ -92,6 +97,9 @@ void sort(Card** cards) {
             }
         }
     }
+
+    for (int i=0; i<7; i++)
+        std::cout<<*cards[i]<<std::endl;
 }
 
 Player::~Player() {

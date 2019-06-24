@@ -14,3 +14,6 @@ all: texas_holdem
 
 texas_holdem: $(objects) 
 			g++ -o $@ $^ $(CPPFLAGS)
+
+clean: 
+	rm src/*.o
