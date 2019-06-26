@@ -1,5 +1,6 @@
 #include "player.h"
 #include <iostream>
+#include <unordered_map>
 
 Player::Player() : hand {nullptr, nullptr}, cardCount(0) {}
 
@@ -35,12 +36,12 @@ poker_hands Player::bestHand (Card** cards) {
     std::unordered_map<int, int> rankCounts;    // holding counts of each rank
 
     // count frequency of each rank, checking for pairs, three of a kind etc. 
-    for(Card* c : cards) {
-        auto iter = rankCounts.find(c->value);
+    for(int i=0; i<7; i++) {
+        auto iter = rankCounts.find(cards[i]->value);
         if (iter != rankCounts.end()) {
             iter->second++;
         } else {
-            rankCounts.insert({c->value, 1});
+            rankCounts.insert({cards[i]->value, 1});
         }
     }
 
@@ -59,9 +60,11 @@ poker_hands Player::bestHand (Card** cards) {
                     case poker_hands::HIGH:
                         bestHand = poker_hands::PAIR;
                         break;
+                    default:
+                        break;
                 }
 
-                rank = max(rank, iter->first);
+                rank = std::max(rank, iter->first);
                 break;
             case 3:
                 if (bestHand == poker_hands::PAIR) {
@@ -70,7 +73,7 @@ poker_hands Player::bestHand (Card** cards) {
                     bestHand = poker_hands::THREEOFAKIND;
                 }
 
-                rank = max(iter->first, rank);
+                rank = std::max(iter->first, rank);
                 break;
             case 4:
                 bestHand = poker_hands::FOUROFAKIND;
@@ -79,20 +82,63 @@ poker_hands Player::bestHand (Card** cards) {
         }
     }
 
+    // check for straight
+    sort(cards);
+    return bestHand;
+
 }
-*/
+
+int Player::checkStraight(Card** cards) {
+    int count = 1;
+    int index = -1;
+    
+    // check for straight with first index
+    for(int i=0; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    std::cout<<"count: "<<count<<std::endl;
+    if (count == 5) index = 0;
+
+    for(int i=1; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    if (count == 10) index = 1;
+
+    for(int i=2; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    if (count == 15) index = 2;
+
+    return index;
+}
+
 void Player::sort(Card** cards) {
-    std::cout<<"sort"<<std::endl;
+
     int n = 7;
-    while (n >= 0) {
-        for(int i=0; i<n; i++) {
-            if (cards[i] > cards[i+1]) {
+    bool swapped = false;
+    do {
+        swapped = false;
+        for(int i=0; i<n-1; i++) {
+            if (cards[i+1]->value < cards[i]->value) {
                 Card* tmp = cards[i];
                 cards[i] = cards[i+1];
                 cards[i+1] = tmp;
-                n = i+1;
+                if (!swapped)
+                    swapped = true;
             }
         }
+    } while (swapped);
+    for (int i=0; i<7; i++) {
+        std::cout<<*(cards[i])<<std::endl;
     }
 }
 
