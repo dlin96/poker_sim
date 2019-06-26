@@ -15,6 +15,7 @@ class Player {
         ~Player();
         void addCard(Card*);
         void sort(Card**);
+        int checkStraight(Card**);
         // void showHand(Card**);
         poker_hands bestHand(Card**);
         

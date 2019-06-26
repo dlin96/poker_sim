@@ -81,25 +81,64 @@ poker_hands Player::bestHand (Card** cards) {
         }
     }
 
+    // check for straight
+    sort(cards);
     return bestHand;
 
 }
 
-void sort(Card** cards) {
+int Player::checkStraight(Card** cards) {
+    int count = 1;
+    int index = -1;
+    
+    // check for straight with first index
+    for(int i=0; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    std::cout<<"count: "<<count<<std::endl;
+    if (count == 5) index = 0;
+
+    for(int i=1; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    if (count == 10) index = 1;
+
+    for(int i=2; i<6; i++) {
+        if (cards[i]->value == cards[i+1]->value) continue;
+        if (cards[i+1]->value - cards[i]->value == 1) count++;
+        else break;
+    }
+
+    if (count == 15) index = 2;
+
+    return index;
+}
+
+void Player::sort(Card** cards) {
+
     int n = 7;
-    while (n >= 0) {
+    bool swapped = false;
+    do {
+        swapped = false;
         for(int i=0; i<n-1; i++) {
-            if (cards[i] > cards[i+1]) {
+            if (cards[i+1]->value < cards[i]->value) {
                 Card* tmp = cards[i];
                 cards[i] = cards[i+1];
                 cards[i+1] = tmp;
-                n = i+1;
+                if (!swapped)
+                    swapped = true;
             }
         }
+    } while (swapped);
+    for (int i=0; i<7; i++) {
+        std::cout<<*(cards[i])<<std::endl;
     }
-
-    for (int i=0; i<7; i++)
-        std::cout<<*cards[i]<<std::endl;
 }
 
 Player::~Player() {

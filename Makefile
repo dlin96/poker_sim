@@ -12,6 +12,9 @@ objects = src/card.o \
 
 all: texas_holdem
 
+test_sort:
+	g++ test/sortest.cpp src/player.cpp src/card.cpp $(CPPFLAGS)
+
 texas_holdem: $(objects) 
 			g++ -o $@ $^ $(CPPFLAGS)
 
