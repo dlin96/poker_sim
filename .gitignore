@@ -4,3 +4,4 @@ texas_holdem
 a.out
 */googletest
 *.dSYM
+results.txt

@@ -10,13 +10,13 @@ class Game {
     Deck* d;
     public:
         int maxPlayers;
-        Card* board[5];
+        std::vector<Card*> board;
         std::vector<Player*> players;
         Game(int maxPlayers);
         ~Game();
         void createGame();
         void addPlayer(Player*);
-        void play();
+        poker_hands play();
         void flop();
         void turn();
         void river();

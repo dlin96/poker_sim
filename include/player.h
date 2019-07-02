@@ -17,7 +17,8 @@ class Player {
         void addCard(Card*);
         void sort(std::vector<Card*>&);
         int checkStraight(std::vector<Card*>, int);
-        // void showHand(Card**);
+        std::vector<Card*> showHand();
+        // void clearHand();
         poker_hands bestHand(std::vector<Card*>);
         
         friend std::ostream& operator<<(std::ostream& os, Player& p) {

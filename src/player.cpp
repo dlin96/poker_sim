@@ -171,6 +171,15 @@ void Player::sort(std::vector<Card*> &cards) {
     } while (swapped);
 }
 
+std::vector<Card*> Player::showHand() {
+
+    std::vector<Card*> ret;
+    ret.push_back(hand[0]);
+    ret.push_back(hand[1]);
+
+    return ret;
+}
+
 Player::~Player() {
     if (hand[0] != nullptr)
         delete hand[0];

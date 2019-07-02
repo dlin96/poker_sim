@@ -2,10 +2,10 @@
 
 Game::Game(int maxPlayers) {
     this->maxPlayers = maxPlayers;
-    d = new Deck();
 }
 
-void Game::play() {
+poker_hands Game::play() {
+    d = new Deck();
     d->shuffle();
     for (Player* p : players) {
         p->addCard(d->deal());
@@ -13,7 +13,6 @@ void Game::play() {
 
     for (Player* p : players) {
         p->addCard(d->deal());
-        // p->showHand(board);
     }
 
     d->burn();
@@ -24,6 +23,21 @@ void Game::play() {
 
     d->burn();
     river();
+
+    poker_hands bestHand;
+    for (Player* p : players) {
+        std::vector<Card*> c = board;
+        std::vector<Card*> h = p->showHand();
+        c.push_back(h[0]);
+        c.push_back(h[1]);
+        bestHand = std::min(bestHand, p->bestHand(c));
+
+    }
+
+    delete d;
+    d = nullptr;
+
+    return bestHand;
 } 
 
 void Game::createGame() {
@@ -35,16 +49,16 @@ void Game::createGame() {
 
 void Game::flop() {
     for(int i=0; i<3; i++) {
-        board[i] = d->deal();
+        board.push_back(d->deal());
     }
 }
 
 void Game::turn() {
-    board[3] = d->deal();
+    board.push_back(d->deal());
 }
 
 void Game::river() {
-    board[4] = d->deal();
+    board.push_back(d->deal());
 }
 
 Game::~Game() {
@@ -55,10 +69,11 @@ Game::~Game() {
     }
 
     // delete deck
-    delete d;
+    if (d != nullptr)
+        delete d;
 
     // delete cards on board
-    for (int i=0; i<5; i++) {
+    for (int i=0; i<board.size(); i++) {
         if (board[i] != nullptr)
             delete board[i];
     }
