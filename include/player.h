@@ -1,6 +1,7 @@
 #include "card.h"
 #include "pokerhands.h"
 #include <ostream>
+#include <vector>
 
 #ifndef PLAYER_H_
 #define PLAYER_H_
@@ -14,10 +15,10 @@ class Player {
         Player();        
         ~Player();
         void addCard(Card*);
-        void sort(Card**);
-        int checkStraight(Card**);
+        void sort(std::vector<Card*>&);
+        int checkStraight(std::vector<Card*>, int);
         // void showHand(Card**);
-        poker_hands bestHand(Card**);
+        poker_hands bestHand(std::vector<Card*>);
         
         friend std::ostream& operator<<(std::ostream& os, Player& p) {
             for (Card* c : p.hand) {

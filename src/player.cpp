@@ -2,6 +2,8 @@
 #include <iostream>
 #include <unordered_map>
 
+#define SUITS 4
+
 Player::Player() : hand {nullptr, nullptr}, cardCount(0) {}
 
 void Player::addCard(Card* c) {
@@ -25,23 +27,40 @@ void Player::showHand(Card** board) {
  * purpose: method that returns the best possible hand given 
  * a player's hand and the board
  *
- * input: Card** cards - array of Card* comprised of the seven cards: 
+ * input: vector<Card*> cards - array of Card* comprised of the seven cards: 
  * the board + the player's hand
  * 
  * return: poker_hands 
  */
-/*
-poker_hands Player::bestHand (Card** cards) {
+
+poker_hands Player::bestHand (std::vector<Card*> cards) {
     poker_hands bestHand = poker_hands::HIGH;   // the best hand is high so far
     std::unordered_map<int, int> rankCounts;    // holding counts of each rank
+    int suitCount[4] = {0};
+
 
     // count frequency of each rank, checking for pairs, three of a kind etc. 
-    for(int i=0; i<7; i++) {
+    for(int i=0; i<cards.size(); i++) {
         auto iter = rankCounts.find(cards[i]->value);
         if (iter != rankCounts.end()) {
             iter->second++;
         } else {
             rankCounts.insert({cards[i]->value, 1});
+        }
+
+        switch (cards[i]->s) {
+            case Card::Suit::CLUBS:
+                suitCount[0]++;
+                break;
+            case Card::Suit::DIAMONDS:
+                suitCount[1]++;
+                break;
+            case Card::Suit::HEARTS:
+                suitCount[2]++;
+                break;
+            case Card::Suit::SPADES:
+                suitCount[3]++;
+                break;
         }
     }
 
@@ -84,44 +103,57 @@ poker_hands Player::bestHand (Card** cards) {
 
     // check for straight
     sort(cards);
+
+    int highCard = checkStraight(cards, 0);
+    highCard = std::max(highCard, checkStraight(cards, 1));
+    highCard = std::max(highCard, checkStraight(cards, 2));
+
+    bool flush = false;
+    bool straight = false;
+
+    for (int i=0; i<SUITS; i++) {
+        if (suitCount[i] >= 5) {
+            bestHand = poker_hands::FLSH;
+            flush = true;
+        }
+    }
+
+    if (highCard != -1) {
+        bestHand = std::min(bestHand, poker_hands::STRT);
+        straight = true;
+    }
+
+    if (straight && flush) {
+        if (highCard == 14) bestHand = poker_hands::ROYAL;
+        else bestHand = std::min(bestHand, poker_hands::STRTFLSH);
+    }
+
     return bestHand;
 
 }
 
-int Player::checkStraight(Card** cards) {
+/*
+ * method_name: checkStraight
+ * params: vector<Card*> card - sorted array of Card* representing board + player's hand
+ * return: index value to start 
+*/
+int Player::checkStraight(std::vector<Card*> cards, int start) {
+
+    int currVal = cards[start]->value;
     int count = 1;
-    int index = -1;
-    
-    // check for straight with first index
-    for(int i=0; i<6; i++) {
-        if (cards[i]->value == cards[i+1]->value) continue;
-        if (cards[i+1]->value - cards[i]->value == 1) count++;
-        else break;
+    for (int i=start+1; i<cards.size(); i++) {
+        if (cards[i]->value - currVal == 1) {
+            currVal = cards[i]->value;
+            count++;
+
+            if (count == 5) return currVal;
+        }
     }
 
-    std::cout<<"count: "<<count<<std::endl;
-    if (count == 5) index = 0;
-
-    for(int i=1; i<6; i++) {
-        if (cards[i]->value == cards[i+1]->value) continue;
-        if (cards[i+1]->value - cards[i]->value == 1) count++;
-        else break;
-    }
-
-    if (count == 10) index = 1;
-
-    for(int i=2; i<6; i++) {
-        if (cards[i]->value == cards[i+1]->value) continue;
-        if (cards[i+1]->value - cards[i]->value == 1) count++;
-        else break;
-    }
-
-    if (count == 15) index = 2;
-
-    return index;
+    return -1;
 }
 
-void Player::sort(Card** cards) {
+void Player::sort(std::vector<Card*> &cards) {
 
     int n = 7;
     bool swapped = false;
@@ -137,9 +169,6 @@ void Player::sort(Card** cards) {
             }
         }
     } while (swapped);
-    for (int i=0; i<7; i++) {
-        std::cout<<*(cards[i])<<std::endl;
-    }
 }
 
 Player::~Player() {
